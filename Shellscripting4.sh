@@ -1,14 +1,15 @@
-clear
 nano $1
 nano $2
-user=$(cat $1| wc -1)
-Pswd=$(cat $2| wc -1)
-if [ $user == $Pswd ]
-then 
-	while read -r -u 3 user && read -r -u 4 Pswd
-	sudo useradd $user
-	sudo echo -e "$Pswd\n$Pswd" | passwd $useradd 
-	done 3<$1 4<$2
+user=$(cat username | wc -l)
+pswd=$(cat password | wc -l)
+if [ $user -eq $pswd ]
+then
+#echo "eq" 
+paste username password | while IFS="$(printf '\t')" read -r u p
+	do
+	sudo useradd $u
+	echo $u:$p | chpasswd
+	done 
 else 
-echo " Cant create Username and password"
+echo "Cant create username and password"
 fi
